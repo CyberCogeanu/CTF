@@ -1,0 +1,17 @@
+--------------------------------------
+Weak RSA
+EASY
+https://app.hackthebox.com/challenges/Weak%20RSA/walkthroughs
+unzip rsa.zip
+pass for the zip: hackthebox
+cat key.pub
+cat flag.enc
+sudo apt install python3-venv
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+python RsaCtfTool.py --publickey key.pub --decryptfile flag.enc
+deactivate
+HTB{s1mpl3_Wi3n3rs_4tt4ck}
+https://www.hackthebox.com/achievement/challenge/303878/6
+--------------------------------------
