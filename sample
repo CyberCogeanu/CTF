@@ -1,0 +1,27 @@
+# Welcome to My Project
+
+This is a **Markdown** document created to demonstrate basic formatting and structure. Markdown is a lightweight markup language that makes writing and formatting text easy.
+
+## Features of Markdown
+
+1. **Simple Syntax**: No need for complex tags or styles.
+2. **Readable Format**: Text is easy to read and write.
+3. **Multi-platform Support**: Works across various platforms like GitHub, Reddit, and more.
+
+### Common Formatting Options
+
+- **Bold**: Use `**` or `__` for **bold text**.
+- *Italic*: Use `*` or `_` for *italicized text*.
+- ~~Strikethrough~~: Use `~~` for ~~strikethrough~~.
+
+### Code Snippets
+
+Inline code can be added with backticks: `console.log("Hello, Markdown!")`.
+
+For blocks of code, use triple backticks:
+
+```javascript
+function greet(name) {
+    console.log(`Hello, ${name}!`);
+}
+greet("World");
